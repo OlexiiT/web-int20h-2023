@@ -1,4 +1,4 @@
-package com.example.foodhelper.controllers;
+package com.example.foodhelper.authentification;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
