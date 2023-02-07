@@ -1,12 +1,15 @@
+import clsx from "clsx";
+
 type Props = {
   children: React.ReactNode;
   captionText?: string;
+  className?: string;
 };
 
-export default function Form({ children, captionText }: Props) {
+export default function Form({ children, captionText, className }: Props) {
   return (
-    <form>
-      {captionText && <FormCaption text={captionText} />}
+    <form className={clsx("flex flex-col gap-4", className)}>
+      {captionText && <FormCaption text={captionText} className="mb-4" />}
       {children}
     </form>
   );
@@ -14,8 +17,9 @@ export default function Form({ children, captionText }: Props) {
 
 type FormCaptionProps = {
   text: string;
+  className?: string;
 };
 
-function FormCaption({ text }: FormCaptionProps) {
-    return <h1>{text}</h1>  
+function FormCaption({ text, className }: FormCaptionProps) {
+    return <h1 className={clsx(className, "text-3xl")}>{text}</h1>  
 }
