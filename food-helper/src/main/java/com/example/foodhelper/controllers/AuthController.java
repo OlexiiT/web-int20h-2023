@@ -1,4 +1,4 @@
-package com.example.foodhelper.authentification;
+package com.example.foodhelper.controllers;
 
 import com.example.foodhelper.entities.User;
 import com.example.foodhelper.repositories.UserRepository;
