@@ -34,4 +34,12 @@ public class AuthService {
     public boolean checkPasswords(User user, User newUser) {
         return user.getEncryptedPassword().equals(newUser.getEncryptedPassword());
     }
+
+    public User getUserNoPassword(User user) {
+        User newUser = new User();
+        newUser.setId(user.getId());
+        newUser.setLogin(user.getLogin());
+        newUser.setProducts(user.getProducts());
+        return newUser;
+    }
 }

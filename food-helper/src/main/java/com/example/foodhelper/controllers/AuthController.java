@@ -3,17 +3,15 @@ package com.example.foodhelper.controllers;
 import com.example.foodhelper.entities.User;
 import com.example.foodhelper.repositories.UserRepository;
 import com.example.foodhelper.services.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
-@Controller
+@RestController
 @RequestMapping("/auth")
 public class AuthController {
     UserRepository userRepository;
@@ -29,24 +27,22 @@ public class AuthController {
         Collection<User> users = userRepository.getAll();
         System.out.println(users);
 
-        /*User user = userRepository.get("user0");
-        System.out.println(user);
-        if (user == null) return ResponseEntity.notFound().build();*/
         return ResponseEntity.ok(users);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestParam String login,
-                                           @RequestParam String password) {
+    public ResponseEntity<Object> register(@RequestParam String login,
+                                             @RequestParam String password,
+                                             HttpServletRequest request) {
         User newUser = authService.createUser(login, password);
         User user = null;
         try {
             user = authService.findUser(newUser);
             if (user != null) {
-                return ResponseEntity.ok("This login is not available");
+                return ResponseEntity.badRequest().body("This login is not available");
             } else {
                 String s = authService.saveUser(newUser);
-                return ResponseEntity.ok(s);
+                return ResponseEntity.ok(authService.getUserNoPassword(newUser));
             }
         } catch (ExecutionException | InterruptedException e) {
             return ResponseEntity.internalServerError().build();
@@ -54,18 +50,19 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String login,
-                                        @RequestParam String password) throws ExecutionException, InterruptedException {
+    public ResponseEntity<Object> login(@RequestParam String login,
+                                        @RequestParam String password,
+                                          HttpServletRequest request) throws ExecutionException, InterruptedException {
         User newUser = authService.createUser(login, password);
         User user = authService.findUser(newUser);
 
         if (user == null) {
-            return ResponseEntity.ok("User doesn't exist");
+            return ResponseEntity.badRequest().body("User doesn't exist");
         } else {
             if (authService.checkPasswords(user, newUser)) {
-                return ResponseEntity.ok("Password is correct!");
+                return ResponseEntity.ok(authService.getUserNoPassword(user));
             } else {
-                return ResponseEntity.ok("Password is incorrect!");
+                return ResponseEntity.badRequest().body("Password is incorrect!");
             }
         }
     }

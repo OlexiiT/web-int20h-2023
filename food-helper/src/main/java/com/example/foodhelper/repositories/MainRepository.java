@@ -5,10 +5,7 @@ import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @Repository
@@ -32,15 +29,17 @@ public class MainRepository<T> {
         }
     }
 
-    public Collection<T> getAll(String collectionName, Class<T> valueType) throws ExecutionException, InterruptedException {
+    public List<T> getAll(String collectionName, Class<T> valueType) throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
 
-        QuerySnapshot querySnapshot = firestore.collection(collectionName).get().get();
-        Collection<T> collection = new ArrayList<>();
+        List<T> collection = new ArrayList<>();
 
-        for (QueryDocumentSnapshot queryDocumentSnapshot: querySnapshot) {
-            System.out.println(queryDocumentSnapshot.getData());
-            collection.add((T) (queryDocumentSnapshot.getData()));
+        ApiFuture<QuerySnapshot> query = firestore.collection(collectionName).get();
+        QuerySnapshot querySnapshot = query.get();
+        List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
+
+        for (QueryDocumentSnapshot document: documents) {
+            collection.add(document.toObject(valueType));
         }
 
         return collection;
