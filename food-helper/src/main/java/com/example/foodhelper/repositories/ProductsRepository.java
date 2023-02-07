@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Repository
-public class ProductsRepository implements DataRepository{
+public class ProductsRepository implements DataRepository<Product>{
     MainRepository<Product> mainRepository;
     String COLLECTION_NAME = "ingredients";
 
@@ -18,22 +18,22 @@ public class ProductsRepository implements DataRepository{
     }
 
     @Override
-    public Object get(String id) throws ExecutionException, InterruptedException {
+    public Product get(String id) throws ExecutionException, InterruptedException {
+        return mainRepository.get(COLLECTION_NAME, id, Product.class);
+    }
+
+    @Override
+    public String save(Product o) throws ExecutionException, InterruptedException {
         return null;
     }
 
     @Override
-    public String save(Object o) throws ExecutionException, InterruptedException {
-        return null;
-    }
-
-    @Override
-    public boolean delete(Object o) {
+    public boolean delete(Product o) {
         return false;
     }
 
     @Override
-    public boolean update(Object o) {
+    public boolean update(Product o) {
         return false;
     }
 

@@ -32,4 +32,8 @@ public class RecipeService {
 
         return result;
     }
+
+    public Collection<Recipe> getAllRecipes() throws ExecutionException, InterruptedException {
+        return recipeRepository.getAll();
+    }
 }
