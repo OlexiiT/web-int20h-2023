@@ -2,15 +2,16 @@ import Link from "next/link";
 import { useState } from "react";
 import styles from "./styles.module.scss";
 import clsx from "clsx";
+import SearchBar from "@/components/forms/inputs/search-bar";
 
 const basicRoutes = [
   {
-    href: "/",
+    href: "/recipes",
     label: "Recipes",
     key: "recipes",
   },
   {
-    href: "/",
+    href: "/products",
     label: "Products",
     key: "products",
   },
@@ -76,6 +77,7 @@ export default function Navbar() {
                   <NavbarLink {...route} />
                 ))}
               </div>
+              <SearchBar placeholder="Ratatouille" outerContainerClassName="self-center" />
               <div className="flex items-stretch">
                 <NavbarLink href="/login" label="Login" key="login" />
               </div>

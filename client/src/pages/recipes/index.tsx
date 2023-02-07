@@ -1,7 +1,7 @@
 import RecipeList from "@/components/recipes/RecipeList";
 import { API_RESOURCE_NAMES } from "@/constants";
 import { combineUrl } from "@/helpers";
-import { Recipe } from "@/types/recipes";
+import { Recipe, RecipePageApiData } from "@/types/recipes";
 import { GetServerSideProps } from "next";
 
 // This gets called on every request
@@ -10,10 +10,10 @@ export const getServerSideProps: GetServerSideProps<
 > = async () => {
   // Fetch data from external API
   const res = await fetch(combineUrl(API_RESOURCE_NAMES.recipes));
-  const data: Recipe[] = await res.json();
+  const data: RecipePageApiData = await res.json();
 
   // Pass data to the page via props
-  return { props: { recipes: data } };
+  return { props: { recipes: data.recipes } };
 };
 
 type RecipesProps = {
