@@ -35,7 +35,10 @@ public class UserRepository implements DataRepository<User>{
     }
 
     @Override
-    public boolean update(User user) {
-        return false;
+    public boolean update(User user) throws ExecutionException, InterruptedException {
+        User newUser = get(String.valueOf(user.getId()));
+        if (newUser == null) return false;
+        save(user);
+        return true;
     }
 }
