@@ -27,11 +27,28 @@ public class AuthService {
         return userRepository.get(String.valueOf(user.getId()));
     }
 
+    public User findUser(String userId) throws ExecutionException, InterruptedException {
+        return userRepository.get(userId);
+    }
+
     public String saveUser(User user) throws ExecutionException, InterruptedException {
         return userRepository.save(user);
     }
 
     public boolean checkPasswords(User user, User newUser) {
         return user.getEncryptedPassword().equals(newUser.getEncryptedPassword());
+    }
+
+    public User getUserNoPassword(User user) {
+        User newUser = new User();
+        newUser.setId(user.getId());
+        newUser.setLogin(user.getLogin());
+        newUser.setProducts(user.getProducts());
+        return newUser;
+    }
+
+    public boolean updateUser(User user) throws ExecutionException, InterruptedException {
+        System.out.println("");
+        return userRepository.update(user);
     }
 }
